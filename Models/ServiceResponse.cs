@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace dotnet_rpg.Models
 {
     public class ServiceResponse<T>

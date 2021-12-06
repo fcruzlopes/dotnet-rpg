@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using dotnet_rpg.Constants;
 using dotnet_rpg.Data;
 using dotnet_rpg.Dtos.Character;
 using dotnet_rpg.Models;
@@ -45,8 +46,8 @@ namespace dotnet_rpg.Services.CharacterService
             }
             catch (InvalidOperationException nullRef)
             {
-                serviceResponse.Message = $"The id of the object don't exist|{nullRef.StackTrace}";
                 serviceResponse.Success = false;
+                serviceResponse.Message = $"{Messages.IdNotFound}\n{nullRef.StackTrace}";
             }
             return serviceResponse;
         }
@@ -85,8 +86,8 @@ namespace dotnet_rpg.Services.CharacterService
             }
             catch (NullReferenceException nullRef)
             {
-                serviceResponse.Message = $"The id of the object don't exist|{nullRef.StackTrace}";
                 serviceResponse.Success = false;
+                serviceResponse.Message = $"{Messages.IdNotFound}\n{nullRef.StackTrace}";
             }
             return serviceResponse;
 

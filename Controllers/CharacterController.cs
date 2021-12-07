@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using dotnet_rpg.Dtos.Character;
 using dotnet_rpg.Models;
@@ -21,7 +23,8 @@ namespace dotnet_rpg.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get()
         {
-            return Ok(await _characterService.GetAllCharacters());
+            int id = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier)).Value);
+            return Ok(await _characterService.GetAllCharacters(id));
         }
 
         [HttpGet("{id}")]
@@ -40,7 +43,7 @@ namespace dotnet_rpg.Controllers
         public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto updateCharacter)
         {
             var response = await _characterService.UpdateCharacter(updateCharacter);
-            if(response.Data is null)
+            if (response.Data is null)
             {
                 return NotFound(response);
             }
@@ -51,7 +54,7 @@ namespace dotnet_rpg.Controllers
         public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> DeleteCharacter(int id)
         {
             var response = await _characterService.DeleteCharacter(id);
-            if(response.Data is null)
+            if (response.Data is null)
             {
                 return NotFound(response);
             }

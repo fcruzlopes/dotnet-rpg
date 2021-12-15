@@ -11,7 +11,7 @@ namespace dotnet_rpg.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                              .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HitPoints = table.Column<int>(type: "int", nullable: false),
                     Strength = table.Column<int>(type: "int", nullable: false),

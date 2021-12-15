@@ -15,12 +15,12 @@ namespace dotnet_rpg.Data
 
         public DataContext(DbContextOptions<DbContext> options) : base(options)
         {
-
         }
 
         public DbSet<Character> Characters { get; set; }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Weapon> Weapons { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

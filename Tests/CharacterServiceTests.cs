@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using dotnet_rpg.Controllers;
@@ -13,8 +15,6 @@ namespace dotnet_rpg.Tests
     public class CharacterServiceTest 
     {
         private readonly Mock<ICharacterService> _sut;
-        private readonly Mock<IMapper> _mapperMock = new Mock<IMapper>();
-        private readonly Mock<DataContext> _dataContextMock = new Mock<DataContext>();
 
         public CharacterServiceTest()
         {
@@ -22,7 +22,7 @@ namespace dotnet_rpg.Tests
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnCustomer_WhenCustomerExists()
+        public async Task GetByIdAsync_ShouldReturnCharacter_WhenCharacterExists()
         {
             //Arrange
             var characterId = 1;
@@ -44,6 +44,34 @@ namespace dotnet_rpg.Tests
             //Assert
             Assert.Equal(characterId, character.Data.Id);
             Assert.Equal(characterName, character.Data.Name);
+        }
+
+        [Fact]
+        public async Task AddCharacterAsync_ShouldAddCharacter_WhenUserAddCharacter()
+        {
+            //Arrange
+            var characterId = 1;
+            var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+            var characterDto = new GetCharacterDto()
+            {
+                Id = characterId,
+                Name = "TestName"
+            };
+            var newCharacterDto = new AddCharacterDto()
+            {
+                Name = characterDto.Name
+            };
+            serviceResponse.Data = new List<GetCharacterDto>();
+            serviceResponse.Data.Add(characterDto);
+            _sut.Setup(x => x.AddCharacter(newCharacterDto))
+                .ReturnsAsync(serviceResponse);
+
+            //Act
+            var characterList = await _sut.Object.AddCharacter(newCharacterDto);
+            GetCharacterDto character = characterList.Data.FirstOrDefault(c => c.Name.Equals(newCharacterDto.Name));
+            //Assert
+            Assert.True(characterList.Data.Any());
+            Assert.Equal(newCharacterDto.Name, character.Name);
         }
     }
 }

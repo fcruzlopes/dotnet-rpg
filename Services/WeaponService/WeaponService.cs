@@ -24,7 +24,6 @@ namespace dotnet_rpg.Services.WeaponService
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _context = context;
-
         }
 
         private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -40,10 +39,10 @@ namespace dotnet_rpg.Services.WeaponService
                 Character character = await _context.Characters.FirstOrDefaultAsync(c => c.Id.Equals(newWeapon.CharacterId) &&
                                                                                          c.User.Id.Equals(GetUserId()));
 
-                if (character is null)
+                if (character is null || character.Weapon != null)
                 {
                     serviceResponse.Success = false;
-                    serviceResponse.Message = Messages.CharacterNotFound;
+                    serviceResponse.Message = $"{Messages.CharacterNotFound} or the given character already has a weapon";
                     return serviceResponse;
                 }
                 Weapon Weapon = new Weapon
@@ -59,7 +58,7 @@ namespace dotnet_rpg.Services.WeaponService
             catch (Exception ex)
             {
                 serviceResponse.Success = false;
-                serviceResponse.Message = $"{Messages.DotNetRpg}{ex.Message}";
+                serviceResponse.Message = $"{Messages.DotNetRpg}{ex.Message}{ex.StackTrace}";
             }
             return serviceResponse;
         }

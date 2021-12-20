@@ -8,6 +8,7 @@ namespace dotnet_rpg.Data
     public class DataContext : DbContext
     {
         private readonly string _connectionString;
+
         public DataContext(string connectionString)
         {
             _connectionString = connectionString;
@@ -30,10 +31,9 @@ namespace dotnet_rpg.Data
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json")
                     .Build();
-                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                var connectionString = configuration.GetConnectionString("DotnetRpgConnection");
                 optionsBuilder.UseSqlServer(connectionString);
             }
         }
-
     }
 }

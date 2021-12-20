@@ -20,7 +20,7 @@ namespace dotnet_rpg.Services.CharacterService
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /*
-            Using dependency injection. Check the ConfigureServices in Startup.cs
+            Using dependency injection.
         */
         public CharacterService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {

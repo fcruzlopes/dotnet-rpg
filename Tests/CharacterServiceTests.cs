@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using dotnet_rpg.Controllers;
-using dotnet_rpg.Data;
 using dotnet_rpg.Dtos.Character;
 using dotnet_rpg.Models;
 using dotnet_rpg.Services.CharacterService;
@@ -69,6 +66,7 @@ namespace dotnet_rpg.Tests
             //Act
             var characterList = await _sut.Object.AddCharacter(newCharacterDto);
             GetCharacterDto character = characterList.Data.FirstOrDefault(c => c.Name.Equals(newCharacterDto.Name));
+            
             //Assert
             Assert.True(characterList.Data.Any());
             Assert.Equal(newCharacterDto.Name, character.Name);

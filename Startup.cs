@@ -34,7 +34,7 @@ namespace dotnet_rpg
             {
                 c.SwaggerDoc(Settings.ProgramVersion, new OpenApiInfo
                 {
-                    Title = "dotnet_rpg",
+                    Title = Settings.ProgramName,
                     Version = Settings.ProgramVersion
                 });
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -71,7 +71,7 @@ namespace dotnet_rpg
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{Settings.ProgramVersion}/swagger.json", $"dotnet_rpg {Settings.ProgramVersion}"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{Settings.ProgramVersion}/swagger.json", $"{Settings.ProgramName} {Settings.ProgramVersion}"));
             }
             app.UseHttpsRedirection();
             app.UseRouting();

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -42,7 +41,7 @@ namespace dotnet_rpg.Services.WeaponService
                 if (character is null || character.Weapon != null)
                 {
                     serviceResponse.Success = false;
-                    serviceResponse.Message = $"{Messages.CharacterNotFound} or the given character already has a weapon";
+                    serviceResponse.Message = $"{Messages.CharacterNotFound} or {Messages.WeaponAlreadyExists}";
                     return serviceResponse;
                 }
                 Weapon Weapon = new Weapon

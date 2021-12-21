@@ -13,5 +13,6 @@ namespace dotnet_rpg.Constants
         public static string IdNotFound = "The given id of the object was not found";
         public static string CharacterNotFound = "The given character was not found"; 
         public static string DotNetRpg = "Something went wrong|";
+        public static string WeaponAlreadyExists = "The given character already has a weapon";
     }
 }

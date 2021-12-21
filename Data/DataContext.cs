@@ -1,4 +1,5 @@
 using System.IO;
+using dotnet_rpg.Constants;
 using dotnet_rpg.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,9 +30,9 @@ namespace dotnet_rpg.Data
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile(Settings.AppsettingsFile)
                     .Build();
-                var connectionString = configuration.GetConnectionString("DotnetRpgConnection");
+                var connectionString = configuration.GetConnectionString(Settings.DbConnectionName);
                 optionsBuilder.UseSqlServer(connectionString);
             }
         }

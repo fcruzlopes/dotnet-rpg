@@ -1,6 +1,7 @@
 using dotnet_rpg.Data;
 using dotnet_rpg.Services.CharacterService;
 using dotnet_rpg.Services.WeaponService;
+using dotnet_rpg.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,11 +28,15 @@ namespace dotnet_rpg
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<DataContext>(s => new DataContext(Configuration.GetConnectionString("DotnetRpgConnection")));
+            services.AddSingleton<DataContext>(s => new DataContext(Configuration.GetConnectionString(Settings.DbConnectionName)));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "dotnet_rpg", Version = "v1" });
+                c.SwaggerDoc(Settings.ProgramVersion, new OpenApiInfo
+                {
+                    Title = "dotnet_rpg",
+                    Version = Settings.ProgramVersion
+                });
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Description = "Bearer {token}",
@@ -66,7 +71,7 @@ namespace dotnet_rpg
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dotnet_rpg v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{Settings.ProgramVersion}/swagger.json", $"dotnet_rpg {Settings.ProgramVersion}"));
             }
             app.UseHttpsRedirection();
             app.UseRouting();

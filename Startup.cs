@@ -25,7 +25,9 @@ namespace dotnet_rpg
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /* 
+            This method gets called by the runtime. Use this method to add services to the container.
+        */
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<DataContext>(s => new DataContext(Configuration.GetConnectionString(Settings.DbConnectionName)));
@@ -56,7 +58,8 @@ namespace dotnet_rpg
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
                             ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                                   System.Text.Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                             ValidateIssuer = false,
                             ValidateAudience = false
                         };
@@ -64,7 +67,9 @@ namespace dotnet_rpg
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /*
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
+        */
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

@@ -24,6 +24,15 @@ namespace dotnet_rpg.Data
         public DbSet<Weapon> Weapons { get; set; }
         public DbSet<Skill> Skills { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Skill>().HasData(
+                new Skill { Id = 1, Name = "Rictusempra", Damage = 1 },
+                new Skill { Id = 2, Name = "Incendio", Damage = 200 },
+                new Skill { Id = 3, Name = "AvadaKedavra", Damage = 100000 }
+            );
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

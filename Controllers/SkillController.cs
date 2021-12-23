@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using dotnet_rpg.Dtos.Skill;
 using dotnet_rpg.Models;
 using dotnet_rpg.Services.SkillService;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace dotnet_rpg.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<Skill>>> GetAllSkills(int characterId)
+        public async Task<ActionResult<ServiceResponse<GetSkillDto>>> GetAllSkills(int characterId)
         {
             var response = await _skillService.GetAllSkills(characterId);
 

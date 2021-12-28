@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using dotnet_rpg.Constants;
 using dotnet_rpg.Data;
+using dotnet_rpg.Dtos;
 using dotnet_rpg.Dtos.Character;
 using dotnet_rpg.Models;
 using Microsoft.AspNetCore.Http;
@@ -71,7 +72,6 @@ namespace dotnet_rpg.Services.CharacterService
                     serviceResponse.Success = false;
                     serviceResponse.Message = Messages.IdNotFound;
                 }
-
             }
             catch (Exception ex)
             {
@@ -87,7 +87,9 @@ namespace dotnet_rpg.Services.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            var dbCharacters = await _context.Characters.Where(c => c.User.Id.Equals(GetUserId()))
+            var dbCharacters = await _context.Characters.Include(c => c.Weapon)
+                                                        .Include(c => c.Skills)
+                                                        .Where(c => c.User.Id.Equals(GetUserId()))
                                                         .ToListAsync();
             serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c))
                                                .ToList();
@@ -102,7 +104,9 @@ namespace dotnet_rpg.Services.CharacterService
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             try
             {
-                var dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id.Equals(id) &&
+                var dbCharacter = await _context.Characters.Include(c => c.Weapon)
+                                                           .Include(c => c.Skills)
+                                                           .FirstOrDefaultAsync(c => c.Id.Equals(id) &&
                                                                                 c.User.Id.Equals(GetUserId()));
                 serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
                 serviceResponse.Message = dbCharacter.ToString();
@@ -148,6 +152,45 @@ namespace dotnet_rpg.Services.CharacterService
                 serviceResponse.Message = $"{Messages.DotNetRpg}{ex.Message}";
             }
             return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetCharacterDto>> AddCharacterSkill(AddSkillDto newSKill)
+        {
+            var response = new ServiceResponse<GetCharacterDto>();
+            try
+            {
+                var character = await _context.Characters.Include(c => c.Weapon)
+                                                               .Include(c => c.Skills)
+                                                               .FirstOrDefaultAsync(c => c.Id.Equals(newSKill.CharacterId) && 
+                                                                                    c.User.Id.Equals(GetUserId()));
+        
+                if (character is null)
+                {
+                    response.Success = false;
+                    response.Message = Messages.CharacterNotFound;
+                    return response;
+                }
+
+                var skill = await _context.Skills.FirstOrDefaultAsync(s => s.Id == newSKill.SkillId);
+
+                if(skill is null)
+                {
+                    response.Success = false;
+                    response.Message = Messages.SkillNotFound;
+                    return response;
+                }
+
+                character.Skills.Add(skill);
+                await _context.SaveChangesAsync();
+
+                response.Data = _mapper.Map<GetCharacterDto>(character);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }

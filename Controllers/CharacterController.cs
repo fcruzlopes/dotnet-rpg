@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using dotnet_rpg.Dtos;
 using dotnet_rpg.Dtos.Character;
 using dotnet_rpg.Models;
 using dotnet_rpg.Services.CharacterService;
@@ -54,6 +55,17 @@ namespace dotnet_rpg.Controllers
             if (response.Data is null)
             {
                 return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPost("Skill")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkill(AddSkillDto newSKill)
+        {
+            var response = await _characterService.AddCharacterSkill(newSKill);
+            if (response.Data is null)
+            {
+                return BadRequest(response);
             }
             return Ok(response);
         }

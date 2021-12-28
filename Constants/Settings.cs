@@ -9,7 +9,7 @@ namespace dotnet_rpg.Constants
 
         public static string AppsettingsFile = "appsettings.json";
         public static string DbConnectionName = "DotnetRPGConnection";
-        public static string ProgramVersion = "v2.0.1";
+        public static string ProgramVersion = "v1";
         public static string ProgramName = "dotnet_rpg";        
     }
 }
